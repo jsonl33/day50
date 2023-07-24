@@ -48,3 +48,64 @@ LOC varchar(50) default '서울'
 insert into dept73(deptno, dname) values(10,'개발부');
 
 select * from dept73;
+
+create table emp77(
+empno number(38),
+ename varchar(50) constraint emp77_ename_nn not null,
+job varchar2(50),
+deptno number(38),
+constraint emp77_empno_pk primary key(empno),
+constraint emp77_job_uk unique(job),
+constraint emp77_deptno_fk foreign key(deptno) references dept71(deptno)
+);
+
+create table member01(
+id varchar2(20),
+name varchar2(50),
+addr varchar2(200),
+phone varchar2(30),
+constraint member01_idphone_pk primary key(id,phone)
+);
+
+select owner,constraint_name,table_name,column_name from user_cons_columns where table_name = 'member01';
+
+--===================================================================
+
+create table dept91(
+deptno number(38) constraint dept91_deptno_pk primary key,
+dname varchar2(50),
+LOC varchar2(50)
+);
+
+insert into dept91 values(10,'경리부','서울');
+insert into dept91 values(20,'영업부','부산');
+
+select * from dept91 order by deptno;
+
+create table emp91(
+empno number(38) constraint emp91_empno_pk primary key,
+ename varchar2(50) constraint emp91_ename_nn not null,
+job varchar2(50),
+deptno number(38) constraint emp91_deptno_fk references dept91(deptno)
+);
+
+insert into emp91 values(11,'홍길동','경리부장',10);
+insert into emp91 values(12,'이순신','영업부장',20);
+
+select * from emp91;
+
+delete from dept91 where deptno=10;
+
+alter table emp91 disable constraint emp91_deptno_fk;
+
+select constraint_name, status from user_constraints where table_name='EMP91';
+
+delete from dept91 where deptno=10;
+
+select * from dept91;
+
+alter table emp91 enable constraint emp91_deptno_fk;
+
+insert into dept91 values(10,'경리부','서울');
+
+commit;
